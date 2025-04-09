@@ -1,0 +1,84 @@
+.base-build-Linux:
+  when: always
+  stage: Bundle
+  tags:
+    - dockerrunner
+  before_script:
+    - desktop-file-validate ./deploy/linux/org.OverEngineer.CuteTales.desktop
+  artifacts:
+    name: CuteTales-Linux
+    paths:
+      - ./outLinux/
+
+
+.test-Linux:
+  stage: Test
+  when: always
+  tags:
+    - dockerrunner
+  image: 0verengineer/aqt-conan-ci-containers-linux-gcc:v6.8
+  coverage: '/Test branch-coverage: \d+\.\d+/'
+  artifacts:
+    paths:
+      - ./outLinux/
+    name: CuteTales-Linux
+    reports:
+      junit:
+        - ./outLinux/test-results.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: ./outLinux/coverage.xml
+  script:
+    - export RUN_TESTS=ON
+    - ./ci/linux/bundleOrTest.sh
+
+
+.build-Flatpak:
+  extends: .base-build-Linux
+  image: 0verengineer/aqt-conan-ci-containers-flatpak:v6.8
+  script:
+    # Build
+    - sudo flatpak-builder ./buildFlatpakLinux --install-deps-from=flathub --force-clean --ccache ./deploy/linux/flatpak/org.OverEngineer.CuteTales.yml
+
+    # Export the build
+    - flatpak build-export ./exportFlatpakLinux ./buildFlatpakLinux
+
+    # Copy the desktop and xml files into export and deploy dir
+    - mkdir -p outLinux/flatpak
+    - cp deploy/linux/org.OverEngineer.CuteTales.desktop exportFlatpakLinux/
+    - cp deploy/linux/flatpak/org.OverEngineer.CuteTales.appdata.xml exportFlatpakLinux/
+
+    # Finally assemble the flatpak
+    - cd ./outLinux/flatpak
+    - flatpak build-bundle ../../exportFlatpakLinux CuteTales.flatpak org.OverEngineer.CuteTales
+
+
+
+.build-AppImage:
+  extends: .base-build-Linux
+  image: 0verengineer/aqt-conan-ci-containers-linux-gcc:v6.8
+  script:
+    - ./ci/linux/bundleOrTest.sh
+
+    # Appdir
+    - export "EXTRA_QT_PLUGINS=svg"
+    - linuxdeploy --plugin qt -e "$(find ./build/src/executable -maxdepth 1 -type f -executable)" --appdir ./build/Appbundle
+    - cp ./deploy/linux/org.OverEngineer.CuteTales.desktop ./assets/icons/org.OverEngineer.CuteTales.png ./build/Appbundle
+
+    # Copy the missing plugins because the EXTRA_QT_PLUGINS variable does not work for all plugins or so...
+    - cp ${QT_PATH}/${QT_VERSION}/gcc_64/plugins/platforms/libqwayland-generic.so ./build/Appbundle/usr/plugins/platforms/
+    - cp ${QT_PATH}/${QT_VERSION}/gcc_64/plugins/platforms/libqwayland-egl.so ./build/Appbundle/usr/plugins/platforms/
+
+    # Copy the other stuff
+    - cp ./deploy/linux/appimage/AppRun ./build/Appbundle/
+    - cp ./deploy/linux/org.OverEngineer.CuteTales.desktop ./build/Appbundle/
+    - cp ./assets/icons/org.OverEngineer.CuteTales.png ./build/Appbundle/
+
+    # Apply permission changes
+    - chmod a+x ./build/Appbundle/AppRun
+
+    # Build an Appimage from the Appdir
+    - appimagetool-x86_64.AppImage ./build/Appbundle
+
+    - mkdir -p outLinux/appimage
+    - cp *.AppImage ./outLinux/appimage/

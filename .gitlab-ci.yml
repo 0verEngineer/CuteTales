@@ -1,0 +1,44 @@
+include:
+    - 'ci/linux/build-ci.yml'
+    - 'ci/macos/build-ci.yml'
+    - 'ci/windows/build-ci.yml'
+
+stages:
+  - Test
+  - Bundle
+
+Windows-Test:
+  extends: .test-Windows
+
+## Windows ##
+Windows:
+  extends: .build-Windows
+
+
+## Linux Test ##
+Linux-Test:
+  extends: .test-Linux
+
+
+## Linux Build + Bundle ##
+Linux-Flatpak:
+  extends: .build-Flatpak
+
+Linux-AppImage:
+  extends: .build-AppImage
+
+
+## MacOS Test ##
+Mac-ARM-Test:
+  extends: .test-Mac-ARM
+
+Mac-x86_64-Test:
+  extends: .test-Mac-x86_64
+
+
+## MacOS Build ##
+Mac-ARM:
+  extends: .build-Mac-ARM
+
+Mac-x86_64:
+  extends: .build-Mac-x86_64

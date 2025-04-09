@@ -1,0 +1,34 @@
+.build-Windows:
+  when: always
+  stage: Bundle
+  tags:
+    - windows-runner
+  script:
+    - ./ci/windows/bundleOrTest.bat
+  artifacts:
+    name: CuteTales-Windows
+    paths:
+      - ./outWin
+
+.test-Windows:
+  when: always
+  stage: Test
+  tags:
+    - windows-runner
+  # disabled because OpenCppCoverage does not support branch coverage, workaround would be to use clang
+  #coverage: '/Test branch-coverage: \d+\.\d+/'
+  variables:
+    RUN_TESTS: "ON"
+  script:
+    - ./ci/windows/bundleOrTest.bat
+  artifacts:
+    name: CuteTales-Windows
+    paths:
+      - ./outWin
+    reports:
+      junit:
+        - ./outWin/test-results.xml
+      # Disabled because OpenCppCoverage does not create useful coverage data
+      #coverage_report:
+      #  coverage_format: cobertura
+      #  path: ./outWin/coverage.xml

@@ -1,0 +1,18 @@
+{
+    "cmake.configureSettings": {
+        "CMAKE_PREFIX_PATH": "C:/Qt/6.8.0/msvc2019_64/"
+    },
+    "cmake.environment": {
+        "PATH": "C:\\Qt\\6.8.0\\msvc2019_64\\bin;${env:PATH}" 
+    },
+    "cmake.generator": "Ninja",
+    "terminal.integrated.env.windows": {
+        "PATH": "C:\\Qt\\6.8.0\\msvc2019_64\\bin;${env:PATH}"
+    },
+    "terminal.integrated.env.osx": {
+        "PATH": "~/Qt/6.8.0/macos/bin:${env:PATH}"
+    },
+    "terminal.integrated.env.linux": {
+        "PATH": "~/Qt/6.8.0/gcc_64/bin:${env:PATH}"
+    }
+}

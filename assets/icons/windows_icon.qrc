@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>org.OverEngineer.CuteTales.ico</file>
+    </qresource>
+</RCC>

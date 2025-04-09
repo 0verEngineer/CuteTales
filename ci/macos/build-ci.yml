@@ -1,0 +1,59 @@
+.base-build-Mac:
+  stage: Bundle
+  when: always
+  tags:
+    - MacMini
+  artifacts:
+    name: CuteTales-Mac
+    paths:
+      - ./outMac
+
+.base-test-Mac:
+  stage: Test
+  when: always
+  tags:
+    - MacMini
+  # disabled because branch data does not work on macOS for now
+  #coverage: '/Test branch-coverage: \d+\.\d+/'
+  artifacts:
+    name: CuteTales-Mac
+    paths:
+      - ./outMac
+
+.build-Mac-x86_64:
+  extends: .base-build-Mac
+  script:
+    - export CMAKE_OSX_ARCHITECTURES="x86_64"
+    - ./ci/macos/bundleOrTest.sh
+
+.build-Mac-ARM:
+  extends: .base-build-Mac
+  script:
+    - ./ci/macos/bundleOrTest.sh
+
+.test-Mac-ARM:
+  extends: .base-test-Mac
+  artifacts:
+    reports:
+      junit:
+        - ./outMac/mac-arm/test-results.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: ./outMac/mac-arm/coverage.xml
+  script:
+    - export RUN_TESTS=ON
+    - ./ci/macos/bundleOrTest.sh
+
+.test-Mac-x86_64:
+  extends: .base-test-Mac
+  artifacts:
+    reports:
+      junit:
+        - ./outMac/mac-arm-to-x86_64/test-results.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: ./outMac/mac-arm-to-x86_64/coverage.xml
+  script:
+    - export RUN_TESTS=ON
+    - export CMAKE_OSX_ARCHITECTURES="x86_64"
+    - ./ci/macos/bundleOrTest.sh

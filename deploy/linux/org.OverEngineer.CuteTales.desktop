@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=CuteTales
+Keywords=audio;media
+Exec=CuteTales
+Icon=org.OverEngineer.CuteTales
+Terminal=false
+Type=Application
+Categories=Audio

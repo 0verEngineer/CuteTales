@@ -1,0 +1,35 @@
+<!--Todo: replace the qt-flatpak-demo stuff here-->
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>org.OverEngineer.CuteTales</id>
+  <developer_name>0verEngineer</developer_name>
+  <launchable type="desktop-id">CuteTales.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0</project_license>
+  <name>CuteTales</name>
+  <summary>Audiobookshelf client application</summary>
+  <description>
+    <p>Client application that connects to your Audiobookshelf server.</p>
+  </description>
+  <releases>
+    <release version="0.0.1" date="2022-07-17"/>
+  </releases>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://raw.githubusercontent.com/flatpak/qt-flatpak-demo/master/assets/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+  <categories>
+    <category>Audio</category>
+    <category>Media</category>
+  </categories>
+  <url type="homepage">https://github.com/flatpak/qt-flatpak-demo</url>
+  <url type="bugtracker">https://github.com/flatpak/qt-flatpak-demo/issues</url>
+  <project_group>Flatpak</project_group>
+  <update_contact>dev@hackinger.net</update_contact>
+  <provides>
+    <binary>CuteTales</binary>
+  </provides>
+  <content_rating type="oars-1.1"/>
+</component>
+

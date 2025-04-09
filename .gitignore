@@ -1,0 +1,24 @@
+
+# CMakeLists.txt.user
+/*.user
+
+/*.idea
+
+/*cmake-build-*
+
+.DS_Store
+
+# Project specifig
+conan/install
+.flatpak-builder
+buildFlatpakLinux
+exportFlatpakLinux
+outLinux
+out
+.vs
+build
+
+# Conan2
+conan/install-Debug
+conan/install-Release
+CMakeUserPresets.json
